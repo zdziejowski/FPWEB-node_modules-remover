@@ -1,11 +1,12 @@
 <#
     FPWEB node_modules Remover
-    Version: 1.0.0
+    Version: 1.0.1
 
     Author: Wojciech Zdziejowski
 #>
 param (
-    [string]$startDirectory = "C:\default\path\here"  # Default path, can be overridden at runtime
+    [string]$startDirectory = "C:\default\path\here",  # Default path, can be overridden at runtime
+    [string[]]$excludeDirectories = @()  # Array of directories to exclude from the search
 )
 
 # Display the script header
@@ -25,6 +26,20 @@ if (-Not (Test-Path -Path $startDirectory)) {
 # Find all top-level node_modules directories
 $nodeModulesDirs = Get-ChildItem -Path $startDirectory -Recurse -Directory -Filter "node_modules" |
                    Where-Object { $_.Parent.FullName -notlike "*\node_modules\*" }
+
+# Exclude specified directories
+if ($excludeDirectories.Count -gt 0) {
+    $nodeModulesDirs = $nodeModulesDirs | Where-Object {
+        $exclude = $false
+        foreach ($excludeDir in $excludeDirectories) {
+            if ($_.FullName -like "*$excludeDir*") {
+                $exclude = $true
+                break
+            }
+        }
+        -not $exclude
+    }
+}
 
 if ($nodeModulesDirs.Count -eq 0) {
     Write-Host "No node_modules directories found in $startDirectory" -ForegroundColor Green

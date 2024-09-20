@@ -7,16 +7,17 @@
 - PowerShell
 
 ## Version
-**1.0.0**
+**1.0.1**
 
 ## Features
 
 - Recursively searches for `node_modules` directories.
 - Deletes the `node_modules` directories and their contents permanently (without moving them to the Recycle Bin).
 - Displays progress in the console with color-coded messages:
-    - **Green** for each directory found.
-    - **Red** for each directory successfully removed.
+    - **RED** for each directory found.
+    - **Green** for each directory successfully removed.
 - Takes a directory path as a parameter for flexibility.
+- Excludes the parent `node_modules` directory from the search path.
 
 ## Prerequisites
 
@@ -32,7 +33,7 @@
 ### Command Example:
 
 ```powershell
-.\remove_node_modules.ps1 -startDirectory "C:\path\to\your\projects"
+.\fpweb_rm.ps1 -startDirectory "C:\path\to\your\projects"
 ```
 
 - The script will start searching for node_modules directories inside the provided path and remove them.
@@ -42,9 +43,15 @@
 -startDirectory: Specifies the path where the search should begin. This is the only required parameter. If no path is provided, a default path will be used.
 ### Example with a Specific Directory:
 ```powershell
-.\remove_node_modules.ps1 -startDirectory "C:\path\to\your\projects"
+.\fpweb_rm.ps1 -startDirectory "C:\path\to\your\projects"
 ```
 
+### Example with a Specific Directory and excluding some directories:
+```powershell
+.\fpweb_rm.ps1 -startDirectory "C:\path\to\your\projects" -excludeDirectories @("dir1", "dir2")
+```
+
+### The end
 I wish you a tasty coffee.
 
 ## License
